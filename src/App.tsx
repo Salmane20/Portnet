@@ -14,6 +14,7 @@ import Declarations from "./pages/Declarations";
 import Documents from "./pages/Documents";
 import Support from "./pages/Support";
 import NotFound from "./pages/NotFound";
+import FillForm from "@/pages/FillForm";
 
 const queryClient = new QueryClient();
 
@@ -51,6 +52,7 @@ const App = () => (
             <Route path="/declarations" element={<Declarations />} />
             <Route path="/documents" element={<Documents />} />
             <Route path="/support" element={<Support />} />
+            <Route path="/fill-form" element={<FillForm />} />
 
             {/* Route 404 */}
             <Route path="*" element={<NotFound />} />

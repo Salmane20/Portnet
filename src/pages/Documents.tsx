@@ -33,10 +33,19 @@ import {
   AlertTriangle,
   Upload,
   ExternalLink,
-  HelpCircle
+  HelpCircle,
+  Bot
 } from "lucide-react";
 import { useState } from "react";
 import ImportateurLayout from "@/components/layouts/ImportateurLayout";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 const documents = {
   aTraiter: [
@@ -232,10 +241,80 @@ const Section = ({ title, icon, children }: SectionProps) => {
   );
 };
 
+const formTypes = [
+  {
+    id: "import-export",
+    title: "Import/Export Declaration",
+    description: "Complete declaration for import/export operations",
+    fields: [
+      "Country of import/export",
+      "Date",
+      "Product (HS Code)",
+      "Amount",
+      "Product Description",
+      "Quantity",
+      "Weight",
+      "Tariff/Tax",
+      "Mode of transport",
+      "Bill of Lading details",
+      "Delivery time",
+      "Licenses",
+      "Sanctions list checks",
+      "Food safety certificates",
+      "Trade Agreement",
+      "Payment method",
+      "Exporter Name",
+      "Importer Name",
+      "Port of Entry/Exit"
+    ]
+  },
+  {
+    id: "ministry",
+    title: "Ministère du Commerce et de l'Industrie",
+    description: "Déclaration pour le ministère du commerce",
+    fields: [
+      "Nom ou raison sociale",
+      "N° du registre du commerce",
+      "Centre du registre du commerce",
+      "Bureau de dedouanement",
+      "Poid",
+      "Unité",
+      "Pays d'origine",
+      "Pays de provenance",
+      "Désignation commerciale de la marchandise",
+      "N° de la nomenclature douanière",
+      "Cachet et signature de l'importateur",
+      "Valeur",
+      "Conditions spéciales",
+      "N° RC",
+      "Montant total en devises",
+      "Destination finale du produit",
+      "Marque du produit"
+    ]
+  },
+  {
+    id: "customs",
+    title: "Douane",
+    description: "Documentation douanière complète",
+    fields: [
+      "Facture commerciale",
+      "Attestation bancaire",
+      "Détail de la valeur par article",
+      "Certificat d'origine",
+      "Titre d'importation",
+      "Attestation de contrôle technique",
+      "Titres de transport",
+      "Liste de colisage",
+      "Justificatifs d'inscription au registre du commerce"
+    ]
+  }
+];
+
 const Documents = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedType, setSelectedType] = useState("all");
   const [currentStep, setCurrentStep] = useState(1);
+  const navigate = useNavigate();
 
   const filteredDocuments = {
     aTraiter: documents.aTraiter.filter(doc => 
@@ -325,84 +404,108 @@ const Documents = () => {
   return (
     <ImportateurLayout>
       <div className="container mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold tracking-tight mb-2">Documents</h1>
-          <p className="text-muted-foreground">
-            Information and documents required for import procedures
-          </p>
-        </div>
-
-        {/* Filters */}
-        <div className="flex flex-wrap gap-4 mb-8">
-          <div className="relative flex-1 max-w-sm">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-            <Input className="pl-10" placeholder="Search documents..." />
+        <div className="max-w-4xl mx-auto">
+          {/* Header */}
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold mb-2">Document Center</h1>
+            <p className="text-muted-foreground">
+              Fill out and manage your import documents with AI assistance
+            </p>
           </div>
 
-          <Button variant="outline" className="gap-2">
-            <Filter className="w-4 h-4" />
-            Filters
-          </Button>
-
-          <Button variant="outline" className="gap-2 ml-auto">
-            <Download className="w-4 h-4" />
-            Export
-          </Button>
-        </div>
-
-        {/* Sections */}
-        <div className="grid gap-6">
-          {/* General Information */}
-          <Section 
-            title="General Information" 
-            icon={<Info className="w-6 h-6 text-blue-600" />}
+          {/* Form Selection */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8"
           >
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {generalInfoItems.map((item, index) => (
-                <InfoCard
-                  key={index}
-                  title={item.title}
-                  icon={item.icon}
-                  description={item.description}
-                />
-              ))}
-            </div>
-          </Section>
+            <Card className="p-6">
+              <div className="flex items-start gap-4">
+                <div className="p-3 rounded-full bg-blue-100 dark:bg-blue-900">
+                  <FileText className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                </div>
+                <div className="flex-1">
+                  <h2 className="text-xl font-semibold mb-2">Import Declaration</h2>
+                  <p className="text-muted-foreground mb-4">
+                    Fill out a new import declaration with step-by-step guidance
+                  </p>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button className="w-full">
+                        Start New Form
+                        <ArrowRight className="w-4 h-4 ml-2" />
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+                      <DialogHeader>
+                        <DialogTitle>Choose Form Type</DialogTitle>
+                      </DialogHeader>
+                      <div className="grid gap-4 py-4">
+                        {formTypes.map((form) => (
+                          <Card 
+                            key={form.id}
+                            className="p-4 cursor-pointer hover:shadow-md transition-shadow"
+                            onClick={() => {
+                              navigate("/fill-form", { state: { formType: form.id } });
+                            }}
+                          >
+                            <h3 className="text-lg font-semibold mb-2">{form.title}</h3>
+                            <p className="text-muted-foreground text-sm mb-3">{form.description}</p>
+                            <div className="text-sm text-muted-foreground">
+                              <strong>Fields include:</strong>
+                              <ul className="mt-1 list-disc list-inside">
+                                {form.fields.slice(0, 3).map((field, index) => (
+                                  <li key={index}>{field}</li>
+                                ))}
+                                {form.fields.length > 3 && (
+                                  <li>And {form.fields.length - 3} more fields...</li>
+                                )}
+                              </ul>
+                            </div>
+                          </Card>
+                        ))}
+                      </div>
+                    </DialogContent>
+                  </Dialog>
+                </div>
+              </div>
+            </Card>
 
-          {/* Ministry of Trade and Industry */}
-          <Section 
-            title="Ministry of Trade and Industry" 
-            icon={<Building2 className="w-6 h-6 text-purple-600" />}
-          >
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {ministryItems.map((item, index) => (
-                <InfoCard
-                  key={index}
-                  title={item.title}
-                  icon={item.icon}
-                  description={item.description}
-                />
-              ))}
-            </div>
-          </Section>
+            <Card className="p-6">
+              <div className="flex items-start gap-4">
+                <div className="p-3 rounded-full bg-indigo-100 dark:bg-indigo-900">
+                  <Bot className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+                </div>
+                <div className="flex-1">
+                  <h2 className="text-xl font-semibold mb-2">AI Assistant</h2>
+                  <p className="text-muted-foreground mb-4">
+                    Get help with your documents from our AI assistant
+                  </p>
+                  <Button 
+                    variant="outline" 
+                    className="w-full"
+                    onClick={() => navigate("/ai-chat")}
+                  >
+                    Ask for Help
+                    <Bot className="w-4 h-4 ml-2" />
+                  </Button>
+                </div>
+              </div>
+            </Card>
+          </motion.div>
 
-          {/* Customs */}
-          <Section 
-            title="Customs" 
-            icon={<Scale className="w-6 h-6 text-green-600" />}
-          >
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {customsItems.map((item, index) => (
-                <InfoCard
-                  key={index}
-                  title={item.title}
-                  icon={item.icon}
-                  description={item.description}
-                />
-              ))}
+          {/* Recent Documents */}
+          <div>
+            <h3 className="text-xl font-semibold mb-4">Recent Documents</h3>
+            <div className="space-y-4">
+              {/* Add recent documents list here */}
+              <Card className="p-4">
+                <p className="text-muted-foreground text-center">
+                  No recent documents found
+                </p>
+              </Card>
             </div>
-          </Section>
+          </div>
         </div>
       </div>
     </ImportateurLayout>

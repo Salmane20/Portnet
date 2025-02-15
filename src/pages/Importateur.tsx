@@ -18,7 +18,6 @@ import {
   MessageSquare
 } from "lucide-react";
 import ImportateurLayout from "@/components/layouts/ImportateurLayout";
-import ImportateurNavbar from "@/components/ImportateurNavbar";
 import { useNavigate } from "react-router-dom";
 
 const textVariants = {
@@ -40,8 +39,6 @@ const Importateur = () => {
   return (
     <ImportateurLayout>
       <div className="min-h-screen bg-background">
-        <ImportateurNavbar />
-        
         {/* Hero Section */}
         <section className="relative py-32 overflow-hidden bg-gradient-to-b from-indigo-50/50 to-white dark:from-indigo-950/50 dark:to-background">
           {/* Decorative Elements */}
@@ -149,7 +146,11 @@ const Importateur = () => {
                     Analyze your documents to detect potential fraud risks using our advanced AI system
                   </p>
                   <div className="mt-auto pt-6 border-t border-blue-200/50 dark:border-blue-800/50">
-                    <Button variant="outline" className="w-full justify-between text-lg font-medium h-14">
+                    <Button 
+                      variant="outline" 
+                      className="w-full justify-between text-lg font-medium h-14"
+                      onClick={() => navigate("/declarations")}
+                    >
                       Start Analysis
                       <ArrowRight className="w-6 h-6 ml-2" />
                     </Button>
@@ -165,18 +166,22 @@ const Importateur = () => {
                       <Bot className="w-7 h-7 text-blue-500" />
                     </div>
                     <div className="text-sm font-medium text-blue-500 bg-blue-50 dark:bg-blue-900/20 px-4 py-2 rounded-full flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full bg-blue-500"></div>
-                      Online
+                      <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></div>
+                      AI Ready
                     </div>
                   </div>
                   <h3 className="text-3xl font-bold mb-6 text-gray-900 dark:text-gray-100 tracking-tight">
                     Fill Documents
                   </h3>
                   <p className="text-gray-600 dark:text-gray-400 text-lg leading-relaxed mb-10 flex-grow">
-                    Use our AI Bot agent to fill out your forms with accuracy and avoid potential errors
+                    Let our AI assistant help you fill out your forms with accuracy and avoid potential errors
                   </p>
                   <div className="mt-auto pt-6 border-t border-blue-200/50 dark:border-blue-800/50">
-                    <Button variant="outline" className="w-full justify-between text-lg font-medium h-14">
+                    <Button 
+                      variant="outline" 
+                      className="w-full justify-between text-lg font-medium h-14"
+                      onClick={() => navigate("/documents")}
+                    >
                       Start Filling
                       <ArrowRight className="w-6 h-6 ml-2" />
                     </Button>
