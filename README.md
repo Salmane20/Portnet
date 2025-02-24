@@ -174,11 +174,3 @@ npm run dev
 3. Commit les changements (`git commit -m 'Add some AmazingFeature'`)
 4. Push vers la branche (`git push origin feature/AmazingFeature`)
 5. Ouvrir une Pull Request
-
-## Licence
-
-Distribué sous la licence MIT. Voir `LICENSE` pour plus d'informations.
-
-## Contact
-
-PORTNET S.A. - [@portnet](https://twitter.com/portnet) - contact@portnet.ma
